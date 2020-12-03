@@ -19,9 +19,9 @@
 
 ### Ticket
 
-使用`AtomicInteger`来生成基础的`TicketSeed`、，同时为避免因所有车次共用一个寄存器而造成性能瓶颈，所以为每一个`Route`创建一个 `AtomicInteger`来将负载均衡。
+使用`AtomicInteger`来生成基础的`TicketSeed`，同时为避免因所有车次共用一个寄存器而造成性能瓶颈，所以为每一个`Route`创建一个 `AtomicInteger`来将负载均衡。
 
-真正的`TicketID`则采用64位的结构，其中后32位为获取到的`TicketSeed`，而高32位则由时间、车次等信息构成。
+真正的`TicketID`则采用64位的结构，其中后27位为获取到的`TicketSeed`，而高37位则由时间、车次等信息构成。
 $$
-[63<- 日期(8),车型(2),车次(6),... ->32][31<- TicketSeed ->0]
+[^{63}<- 日期(14,4,5),车次(14) ->^{27}][^{26}<- \qquad TicketSeed \qquad  ->^{0}]
 $$

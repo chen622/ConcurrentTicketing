@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TicketingDS implements TicketingSystem {
-    private ConcurrentHashMap<String, Route> routeMap;
+    private final ConcurrentHashMap<Integer, Route> routeMap;
     private final int routeNum;
     private final int stationNum;
 
@@ -36,23 +36,34 @@ public class TicketingDS implements TicketingSystem {
         this.stationNum = stationNum;
         this.routeMap = new ConcurrentHashMap<>(routeNum);
         for (int count = 0; count < routeNum; count++) {
-            String routeId = "G" + (count + 1);
-            this.routeMap.put(routeId, new Route(routeId, coachNum, seatNum));
+            this.routeMap.put(count, new Route(count, coachNum, seatNum, stationNum));
         }
     }
 
     @Override
-    public Ticket buyTicket(String passenger, int route, int departure, int arrival) {
-        return null;
+    public Ticket buyTicket(String passenger, int routeNum, int departure, int arrival) {
+        Route route = routeMap.get(routeNum - 1);
+        if (route == null) return null;
+        Ticket ticket = route.buyTicket(departure - 1, arrival - 1);
+        if (ticket == null) return null;
+        ticket.setPassenger(passenger);
+        return ticket;
     }
 
     @Override
-    public int inquiry(int route, int departure, int arrival) {
-        return 0;
+    public int inquiry(int routeNum, int departure, int arrival) {
+        Route route = routeMap.get(routeNum - 1);
+        if (route == null) return -1;
+        return route.query(departure - 1, arrival - 1);
     }
 
     @Override
     public boolean refundTicket(Ticket ticket) {
-        return false;
+        Route route = routeMap.get(ticket.route - 1);
+        ticket.coach -= 1;
+        ticket.seat -= 1;
+        ticket.departure -= 1;
+        ticket.arrival -= 1;
+        return route.refundTicket(ticket);
     }
 }
