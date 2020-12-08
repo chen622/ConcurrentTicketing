@@ -59,11 +59,12 @@ public class TicketingDS implements TicketingSystem {
 
     @Override
     public boolean refundTicket(Ticket ticket) {
-        Route route = routeMap.get(ticket.route - 1);
-        ticket.coach -= 1;
-        ticket.seat -= 1;
-        ticket.departure -= 1;
-        ticket.arrival -= 1;
-        return route.refundTicket(ticket);
+        Ticket copyTicket = ticket.copy();
+        Route route = routeMap.get(copyTicket.route - 1);
+        copyTicket.coach -= 1;
+        copyTicket.seat -= 1;
+        copyTicket.departure -= 1;
+        copyTicket.arrival -= 1;
+        return route.refundTicket(copyTicket);
     }
 }

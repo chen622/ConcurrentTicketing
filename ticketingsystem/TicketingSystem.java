@@ -40,6 +40,18 @@ class Ticket {
     public void setPassenger(String passenger) {
         this.passenger = passenger;
     }
+
+    public Ticket copy(){
+        Ticket copy = new Ticket();
+        copy.tid = this.tid;
+        copy.passenger = this.passenger;
+        copy.route = this.route;
+        copy.coach = this.coach;
+        copy.seat = this.seat;
+        copy.departure = this.departure;
+        copy.arrival = this.arrival;
+        return copy;
+    }
 }
 
 
