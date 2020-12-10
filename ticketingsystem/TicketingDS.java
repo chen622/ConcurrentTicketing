@@ -48,7 +48,7 @@ public class TicketingDS implements TicketingSystem {
         Ticket ticket = route.buyTicket(departure - 1, arrival - 1);
         if (ticket == null) return null;
         ticket.passenger = passenger;
-        ticket.tid |= ((long) getHash(ticket) << (32L));
+        ticket.tid |= ((long) getHash(ticket) << (31L));
         return ticket;
     }
 
@@ -67,7 +67,7 @@ public class TicketingDS implements TicketingSystem {
         copyTicket.seat -= 1;
         copyTicket.departure -= 1;
         copyTicket.arrival -= 1;
-        if (getHash(ticket) != (ticket.tid >> 32))
+        if (getHash(ticket) != (ticket.tid >> 31))
             return false;
         return route.refundTicket(copyTicket);
     }

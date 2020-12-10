@@ -132,6 +132,9 @@ public class Route {
         ticket.arrival = arrival;
         long id = 0;
         id |= tidSeed;
+        id &= generateSeat(0, 23);
+        id |= (route << 23);
+        id &= generateSeat(0, 31);
 //        Calendar cal = Calendar.getInstance();
 //        long year = (long) cal.get(Calendar.YEAR) << (SEED_WIDTH + COACH_WIDTH + DAY_WIDTH + MONTH_WIDTH);
 //        long month = (long) (cal.get(Calendar.MONTH) + 1) << (SEED_WIDTH + COACH_WIDTH + DAY_WIDTH);
