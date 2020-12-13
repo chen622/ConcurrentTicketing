@@ -24,6 +24,7 @@
 package ticketingsystem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TicketingDS implements TicketingSystem {
@@ -46,7 +47,8 @@ public class TicketingDS implements TicketingSystem {
         if (route == null) return null;
         Ticket ticket = route.buyTicket(departure - 1, arrival - 1);
         if (ticket == null) return null;
-        ticket.setPassenger(passenger);
+        ticket.passenger = passenger;
+        ticket.tid |= ((long) getHash(ticket) << (31L));
         return ticket;
     }
 
@@ -59,12 +61,32 @@ public class TicketingDS implements TicketingSystem {
 
     @Override
     public boolean refundTicket(Ticket ticket) {
-        Ticket copyTicket = ticket.copy();
+        Ticket copyTicket = copy(ticket);
         Route route = routeMap.get(copyTicket.route - 1);
         copyTicket.coach -= 1;
         copyTicket.seat -= 1;
         copyTicket.departure -= 1;
         copyTicket.arrival -= 1;
+        if (getHash(ticket) != (ticket.tid >> 31))
+            return false;
         return route.refundTicket(copyTicket);
+    }
+
+    public Integer getHash(Ticket ticket) {
+        String hashString = ticket.passenger + ticket.route + ticket.coach + ticket.seat;
+        return hashString.hashCode();
+    }
+
+
+    public Ticket copy(Ticket ticket) {
+        Ticket copy = new Ticket();
+        copy.tid = ticket.tid;
+        copy.passenger = ticket.passenger;
+        copy.route = ticket.route;
+        copy.coach = ticket.coach;
+        copy.seat = ticket.seat;
+        copy.departure = ticket.departure;
+        copy.arrival = ticket.arrival;
+        return copy;
     }
 }

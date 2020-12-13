@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2020 Chenming C
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package ticketingsystem;
 
 import java.util.ArrayList;
@@ -51,7 +74,7 @@ public class Route {
                 long checkSeat = generateSeat(departure, arrival);
                 if ((originSeat & checkSeat) == 0) {
                     if (coachList.get(i).get(j).compareAndSet(originSeat, originSeat | checkSeat)) {
-                        return new Ticket(seedGenerator.getAndIncrement(), this.routeId + 1, i + 1, j + 1, departure + 1, arrival + 1);
+                        return newTicket(seedGenerator.getAndIncrement(), this.routeId + 1, i + 1, j + 1, departure + 1, arrival + 1);
                     }
                 }
             }
@@ -98,6 +121,28 @@ public class Route {
             seat |= 1 << i;
         }
         return seat;
+    }
+
+    public Ticket newTicket(int tidSeed, int route, int coach, int seat, int departure, int arrival) {
+        Ticket ticket = new Ticket();
+        ticket.route = route;
+        ticket.coach = coach;
+        ticket.seat = seat;
+        ticket.departure = departure;
+        ticket.arrival = arrival;
+        long id = 0;
+        id |= tidSeed;
+        id &= generateSeat(0, 23);
+        id |= (route << 23);
+        id &= generateSeat(0, 31);
+//        Calendar cal = Calendar.getInstance();
+//        long year = (long) cal.get(Calendar.YEAR) << (SEED_WIDTH + COACH_WIDTH + DAY_WIDTH + MONTH_WIDTH);
+//        long month = (long) (cal.get(Calendar.MONTH) + 1) << (SEED_WIDTH + COACH_WIDTH + DAY_WIDTH);
+//        long day = (long) cal.get(Calendar.DAY_OF_MONTH) << (SEED_WIDTH + COACH_WIDTH);
+//        long routeBinary = (long) route << SEED_WIDTH;
+//        id = id | year | month | day | routeBinary;
+        ticket.tid = id;
+        return ticket;
     }
 
 }
