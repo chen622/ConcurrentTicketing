@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Test {
 
-    final static int threadnums[] = {1, 4, 8, 16, 32, 64};
+    final static int threadnums[] = {1, 4, 8, 16, 32, 64, 128};
     final static int routenum = 20; // route is designed from 1 to 3
     final static int coachnum = 10; // coach is arranged from 1 to 5
     final static int seatnum = 100; // seat is allocated from 1 to 20
