@@ -8,11 +8,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Test {
 
-    final static int threadnums[] = {1, 4, 8, 16, 32, 64, 128};
-    final static int routenum = 20; // route is designed from 1 to 3
-    final static int coachnum = 10; // coach is arranged from 1 to 5
+    final static int threadnums[] = {1, 4, 8, 16, 32, 64, 100, 128};
+    final static int routenum = 100; // route is designed from 1 to 3
+    final static int coachnum = 50; // coach is arranged from 1 to 5
     final static int seatnum = 100; // seat is allocated from 1 to 20
-    final static int stationnum = 16; // station is designed from 1 to 5
+    final static int stationnum = 50; // station is designed from 1 to 5
 
     final static int testnum = 100000;
     final static int retpc = 10; // return ticket operation is 10% percent
