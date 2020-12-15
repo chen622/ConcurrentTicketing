@@ -1,11 +1,10 @@
 package ticketingsystem;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Test {
 
@@ -36,6 +35,8 @@ public class Test {
 
             final long startTime = System.currentTimeMillis();
             //long preTime = startTime;
+            AtomicInteger totalBuyCount = new AtomicInteger(0), totalReturnCount = new AtomicInteger(0), totalQueryCount = new AtomicInteger(0);
+            AtomicLong totalBuyPeriod = new AtomicLong(0), totalReturnPeriod = new AtomicLong(0), totalQueryPeriod = new AtomicLong(0);
 
             for (int i = 0; i < threadnum; i++) {
                 threads[i] = new Thread(new Runnable() {
@@ -43,8 +44,13 @@ public class Test {
                         Random rand = new Random();
                         Ticket ticket = new Ticket();
                         ArrayList<Ticket> soldTicket = new ArrayList<Ticket>();
+
+                        int buyCount = 0, returnCount = 0, queryCount = 0;
+                        long buyPeriod = 0, returnPeriod = 0, queryPeriod = 0;
+
                         for (int i = 0; i < testnum; i++) {
                             int sel = rand.nextInt(inqpc);
+                            long periodStart = System.currentTimeMillis();
                             if (0 <= sel && sel < retpc && soldTicket.size() > 0) { // return ticket
                                 int select = rand.nextInt(soldTicket.size());
                                 long preTime = System.currentTimeMillis() - startTime;
@@ -52,6 +58,8 @@ public class Test {
                                     preTime = System.currentTimeMillis() - startTime;
                                     if (tds.refundTicket(ticket)) {
                                         long postTime = System.currentTimeMillis() - startTime;
+                                        returnCount++;
+                                        returnPeriod += System.currentTimeMillis() - periodStart;
 //                                    out.write(preTime + " " + postTime + " " + ThreadId.get() + " " + "TicketRefund" + " " + ticket.tid + " " + ticket.passenger + " " + ticket.route + " " + ticket.coach + " " + ticket.departure + " " + ticket.arrival + " " + ticket.seat + "\n");
                                     } else {
                                         long postTime = System.currentTimeMillis() - startTime;
@@ -69,6 +77,8 @@ public class Test {
                                 long preTime = System.currentTimeMillis() - startTime;
                                 if ((ticket = tds.buyTicket(passenger, route, departure, arrival)) != null) {
                                     long postTime = System.currentTimeMillis() - startTime;
+                                    buyCount++;
+                                    buyPeriod += System.currentTimeMillis() - periodStart;
 //                                out.write(preTime + " " + postTime + " " + ThreadId.get() + " " + "TicketBought" + " " + ticket.tid + " " + ticket.passenger + " " + ticket.route + " " + ticket.coach + " " + ticket.departure + " " + ticket.arrival + " " + ticket.seat + "\n");
                                     soldTicket.add(ticket);
                                 } else {
@@ -82,9 +92,17 @@ public class Test {
                                 long preTime = System.currentTimeMillis() - startTime;
                                 int leftTicket = tds.inquiry(route, departure, arrival);
                                 long postTime = System.currentTimeMillis() - startTime;
+                                queryCount++;
+                                queryPeriod += System.currentTimeMillis() - periodStart;
 //                            out.write(preTime + " " + postTime + " " + ThreadId.get() + " " + "RemainTicket" + " " + leftTicket + " " + route + " " + departure + " " + arrival + "\n");
                             }
                         }
+                        totalBuyCount.addAndGet(buyCount);
+                        totalQueryCount.addAndGet(queryCount);
+                        totalReturnCount.addAndGet(returnCount);
+                        totalBuyPeriod.addAndGet(buyPeriod);
+                        totalQueryPeriod.addAndGet(queryPeriod);
+                        totalReturnPeriod.addAndGet(returnPeriod);
                     }
                 });
                 threads[i].start();
@@ -95,6 +113,9 @@ public class Test {
             }
             long postTime = (System.currentTimeMillis() - startTime);
             System.out.println("Using " + threadnum + " threads: " + postTime + "ms");
+            System.out.printf("Buy method:\t\t count %7d | period %5d | average %.5f ms\n", totalBuyCount.get(), totalBuyPeriod.get(), (float) totalBuyPeriod.get() / totalBuyCount.get());
+            System.out.printf("Return method:\t count %7d | period %5d | average %.5f ms\n", totalReturnCount.get(), totalReturnPeriod.get(), (float) totalReturnPeriod.get() / totalReturnCount.get());
+            System.out.printf("Query method:\t count %7d | period %5d | average %.5f ms\n\n", totalQueryCount.get(), totalQueryPeriod.get(), (float) totalQueryPeriod.get() / totalQueryCount.get());
             TimeUnit.SECONDS.sleep(2);
             System.out.println("Sleep finish!");
         }
