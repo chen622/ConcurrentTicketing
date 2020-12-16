@@ -41,3 +41,4 @@ fabric.properties
 *.rar
 hs_err_pid*
 !verify/verify.jar
+!linear-checker/checker.jar

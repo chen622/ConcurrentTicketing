@@ -109,9 +109,11 @@ public class Route {
             // ~o       01100100110
             // check    00011111000
             // result   00000100000
-            if ((~originalSeat & checkSeat) != 0) return false;
+            if ((~originalSeat & checkSeat) != 0)
+                return false;
             newSeat = originalSeat & ~generateSeat(ticket.departure, ticket.arrival);
         } while (!coachList.get(ticket.coach).get(ticket.seat).compareAndSet(originalSeat, newSeat));
+
         return true;
     }
 

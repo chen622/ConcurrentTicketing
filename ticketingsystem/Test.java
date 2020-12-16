@@ -33,11 +33,11 @@ public class Test {
 
             final TicketingDS tds = new TicketingDS(routenum, coachnum, seatnum, stationnum, threadnum);
 
-            final long startTime = System.currentTimeMillis();
             //long preTime = startTime;
             AtomicInteger totalBuyCount = new AtomicInteger(0), totalReturnCount = new AtomicInteger(0), totalQueryCount = new AtomicInteger(0);
             AtomicLong totalBuyPeriod = new AtomicLong(0), totalReturnPeriod = new AtomicLong(0), totalQueryPeriod = new AtomicLong(0);
 
+            final long startTime = System.currentTimeMillis();
             for (int i = 0; i < threadnum; i++) {
                 threads[i] = new Thread(new Runnable() {
                     public void run() {
@@ -113,7 +113,7 @@ public class Test {
             }
             long postTime = (System.currentTimeMillis() - startTime);
             System.out.println("Using " + threadnum + " threads: " + postTime + "ms");
-            System.out.printf("Buy method:\t\t count %7d | period %5d | average %.5f ms\n", totalBuyCount.get(), totalBuyPeriod.get(), (float) totalBuyPeriod.get() / totalBuyCount.get());
+            System.out.printf("Buy method:\t count %7d | period %5d | average %.5f ms\n", totalBuyCount.get(), totalBuyPeriod.get(), (float) totalBuyPeriod.get() / totalBuyCount.get());
             System.out.printf("Return method:\t count %7d | period %5d | average %.5f ms\n", totalReturnCount.get(), totalReturnPeriod.get(), (float) totalReturnPeriod.get() / totalReturnCount.get());
             System.out.printf("Query method:\t count %7d | period %5d | average %.5f ms\n\n", totalQueryCount.get(), totalQueryPeriod.get(), (float) totalQueryPeriod.get() / totalQueryCount.get());
             TimeUnit.SECONDS.sleep(2);
