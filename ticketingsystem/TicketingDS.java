@@ -67,6 +67,7 @@ public class TicketingDS implements TicketingSystem {
 
     @Override
     public boolean refundTicket(Ticket ticket) {
+        if (ticket.hasReturn) return false;
         if (!checkLegal(ticket.route, ticket.departure, ticket.arrival, ticket.coach, ticket.seat)) return false;
         Ticket copyTicket = copy(ticket);
         Route route = routeMap.get(copyTicket.route - 1);
@@ -77,7 +78,7 @@ public class TicketingDS implements TicketingSystem {
         if (copyTicket.seat < 0 || (getHash(ticket) << 31L >> 31L) != (ticket.tid >> 31) || !route.refundTicket(copyTicket))
             return false;
         else {
-            ticket.seat = -1;
+            ticket.hasReturn = true;
             return true;
         }
     }
