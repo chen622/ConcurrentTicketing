@@ -3,15 +3,15 @@
 
 [TOC]
 
-## Mainly Data Structure
+## 主体数据结构
 ### Route Map
-这是系统最基础的数据结构，它使用JDK提供的`ConcurrentHashMap`实现，尽管它其实不会发生并发读写的情况，但这里为了严谨还是采用了线程安全的数据结构，同时其`get`方法拥有与`HashMap`相同的性能。
+这是系统最基础的数据结构，它使用JDK提供的`ConcurrentHashMap`实现，尽管它其实不会发生并发读写的情况，但这里为了严谨还是采用了线程安全的数据结构，同时其`get`方法拥有与`HashMap`相同的性能，对于本程序也可直接替换为`HashMap`。
 
 它主要用于存储车次到`Route`的映射关系，是在系统启动时便生成好的，后续操作时仅会对其进行查询。
 
 ### Route
 
-使用`CopyOnWriteArrayList<CopyOnWriteArrayList<AtomicInteger>>`这个二维数组来存储`Route`到`Seat`的映射，同时这两个数组也是仅在创建时对其进行初始化，之后仅会进行查询操作。
+使用`CopyOnWriteArrayList<CopyOnWriteArrayList<AtomicInteger>>`这个二维数组来存储`Route`到`Seat`的映射，同时这两个数组也是仅在创建时对其进行初始化，之后仅会进行查询操作，对于本程序也可直接替换为`ArrayList<ArrayList<AtomicInteger>>`。
 
 ### Seat
 
@@ -23,4 +23,9 @@
 
 真正的`TicketID`则采用64位的结构，其中低24位为获取到的`TicketSeed`，中间的8位为车次，而高32位则由时间、车次等信息拼凑的字符串的HashCode构成。
 
-[<sup>63</sup> hashCode(passenger + route + coach + seat)  <sup>32</sup>][<sup>31</sup> route id <sup>24</sup>][<sup>23</sup> ticket seed <sup>0</sup>]
+\[<sup>63</sup> hashCode(passenger + route + coach + seat)  <sup>32</sup>\]\[ <sup>31</sup> route id  <sup>24</sup>\][<sup>23</sup> ticket seed <sup>0</sup>]
+
+因本系统只解决售票时的并发问题，因此未使用数据库等技术存储已售票信息。因此对于退票信息的验证，仅采用重新生成HashCode的方式来验证。同时对于已退的票会使用`hasReturn`字段来防止错误，错误原因在于系统仅会验证票面信息对应的座位是否已售出，如未售出则报错，当一张票被退后，座位却又被售出，这时再退票就会出现异常，因此使用`hasReturn`字段进行标记。
+
+## 测试数据
+
