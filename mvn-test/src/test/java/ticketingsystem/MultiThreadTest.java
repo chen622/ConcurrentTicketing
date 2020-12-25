@@ -20,21 +20,21 @@ public class MultiThreadTest {
     // barrier for making all threads begin at same time
     protected CyclicBarrier barrier;
     // buy tickest
-    CopyOnWriteArrayList<Ticket> soldTicket = new CopyOnWriteArrayList<>();
-    CopyOnWriteArrayList<int[]> cannotSoldTicket = new CopyOnWriteArrayList<>();
+    List<Ticket> soldTicket = Collections.synchronizedList(new ArrayList<Ticket>());
+    List<int[]> cannotSoldTicket = Collections.synchronizedList(new ArrayList<int[]>());
     AtomicInteger soldTicketNum = new AtomicInteger(0);
     AtomicInteger refundTicketNum = new AtomicInteger(0);
     AtomicInteger realRefundTicketNum = new AtomicInteger(0);
 
     int opForRoute;
     // ticketing date struct
-    int threadnum = 6;
+    int threadnum = 8;
     int routenum = 20;      // route is designed from 1 to 20
     int coachnum = 10;      // coach is arranged from 1 to 10
     int seatnum = 100;      // seat is allocated from 1 to 100
     int stationnum = 16;    // station is designed from 1 to 16
     final static int TESTNUM = 50;
-    private byte[] lock = new byte[1];
+    private byte[] lock = new byte[0];
     protected TicketingDS tds;
 
     // system start time
@@ -161,10 +161,10 @@ public class MultiThreadTest {
                         // System.out.flush();
                         if (refundOK) {
                             realRefundTicketNum.getAndIncrement();
-//                            if(tds.refundTicket(tic)) {
-//                                // cannot success
-//                                realRefundTicketNum.getAndDecrement();
-//                            }
+                            if(tds.refundTicket(tic)) {
+                                // cannot success
+                                realRefundTicketNum.getAndDecrement();
+                            }
                         } else {
                             System.err.printf("[%02d/%02d](%-13d) R: %03d-%03d != (%02d)->(%02d)\n", currentRepetition,
                                     totalRepetitions, System.nanoTime() - startTime, tic.coach, tic.seat, tic.departure,

@@ -65,16 +65,20 @@ public class Route {
         if (departure >= stationNum || arrival >= stationNum) return null;
         List<Integer> tempCoachNumList = this.coachNumList.subList(0, this.coachNumList.size());
         Random tempRand = new Random(System.currentTimeMillis());
-        Collections.shuffle(tempCoachNumList, tempRand);
+        Collections.shuffle(tempCoachNumList, tempRand); // 将车厢顺序打乱，避免压力集中在前几个车厢
         List<Integer> tempSeatNumList = this.seatNumList.subList(0, this.seatNumList.size());
-        Collections.shuffle(tempSeatNumList, tempRand);
-        for (int i = 0; i < tempCoachNumList.size(); i++) {
-            for (int j = 0; j < tempSeatNumList.size(); j++) {
-                long originSeat = coachList.get(i).get(j).get();
-                long checkSeat = generateSeat(departure, arrival);
-                if ((originSeat & checkSeat) == 0) {
-                    if (coachList.get(i).get(j).compareAndSet(originSeat, originSeat | checkSeat)) {
-                        return newTicket(seedGenerator.getAndIncrement(), this.routeId + 1, i + 1, j + 1, departure + 1, arrival + 1);
+        Collections.shuffle(tempSeatNumList, tempRand); // 将座位顺序打乱，避免压力集中在前几个座位
+        for (int i = 0; i < tempCoachNumList.size(); i++) { // 遍历所有车厢
+            for (int j = 0; j < tempSeatNumList.size(); j++) { // 遍历所有座位
+                while (true) {
+                    long originSeat = coachList.get(i).get(j).get();
+                    long checkSeat = generateSeat(departure, arrival);
+                    if ((originSeat & checkSeat) == 0) {
+                        if (coachList.get(i).get(j).compareAndSet(originSeat, originSeat | checkSeat)) {
+                            return newTicket(seedGenerator.getAndIncrement(), this.routeId + 1, i + 1, j + 1, departure + 1, arrival + 1);
+                        }
+                    } else {
+                        break;
                     }
                 }
             }
@@ -135,7 +139,7 @@ public class Route {
         long id = 0;
         id |= tidSeed;
         id &= generateSeat(0, 23);
-        id |= ((long)route << 23);
+        id |= ((long) route << 23);
         id &= generateSeat(0, 31);
 //        Calendar cal = Calendar.getInstance();
 //        long year = (long) cal.get(Calendar.YEAR) << (SEED_WIDTH + COACH_WIDTH + DAY_WIDTH + MONTH_WIDTH);
