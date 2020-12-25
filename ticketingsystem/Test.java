@@ -10,7 +10,7 @@ public class Test {
 
     final static int threadnums[] = {1, 4, 8, 16, 32, 64, 100, 128};
     final static int routenum = 100; // route is designed from 1 to 3
-    final static int coachnum = 50; // coach is arranged from 1 to 5
+    final static int coachnum = 14; // coach is arranged from 1 to 5
     final static int seatnum = 100; // seat is allocated from 1 to 20
     final static int stationnum = 50; // station is designed from 1 to 5
 
