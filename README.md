@@ -61,18 +61,17 @@
 
 ### 性能测试
 
-#### 小数据测试情况
-
 ```java
 // 测试参数
-final static int routenum = 20;
+final static int routenum = 100;
 final static int coachnum = 10;
 final static int seatnum = 100;
 final static int stationnum = 16;
-final static int testnum = 100000;
+final static int testnum = 1000000; // small test size
+final static int testnum = 10000000; // big test size
 final static int retpc = 10;
 final static int buypc = 30;
 final static int inqpc = 100;
 ```
 
-![throughput](https://img.ccm.ink/throughput.png)
+![throughput](./img/throughput-new.png)
