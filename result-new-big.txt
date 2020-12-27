@@ -1,0 +1,48 @@
+Using 1 threads: 165082ms
+Buy method:	 count 1486121 | period 12528 | average 0.00843 ms
+Return method:	 count  999425 | period 25288 | average 0.02530 ms
+Query method:	 count 6999153 | period 114614 | average 0.01638 ms
+
+Sleep finish!
+Using 4 threads: 32961ms
+Buy method:	 count 1485402 | period 15554 | average 0.01047 ms
+Return method:	 count  999064 | period  6810 | average 0.00682 ms
+Query method:	 count 6999230 | period 94975 | average 0.01357 ms
+
+Sleep finish!
+Using 8 threads: 17248ms
+Buy method:	 count 1485147 | period 16085 | average 0.01083 ms
+Return method:	 count 1000531 | period  4141 | average 0.00414 ms
+Query method:	 count 6999685 | period 101519 | average 0.01450 ms
+
+Sleep finish!
+Using 16 threads: 9585ms
+Buy method:	 count 1485344 | period 18355 | average 0.01236 ms
+Return method:	 count 1000125 | period  4278 | average 0.00428 ms
+Query method:	 count 7000658 | period 110684 | average 0.01581 ms
+
+Sleep finish!
+Using 32 threads: 5073ms
+Buy method:	 count 1485240 | period 19590 | average 0.01319 ms
+Return method:	 count  998763 | period  2213 | average 0.00222 ms
+Query method:	 count 6998852 | period 120492 | average 0.01722 ms
+
+Sleep finish!
+Using 64 threads: 2930ms
+Buy method:	 count 1485940 | period 22636 | average 0.01523 ms
+Return method:	 count 1001306 | period  2769 | average 0.00277 ms
+Query method:	 count 6998413 | period 134169 | average 0.01917 ms
+
+Sleep finish!
+Using 100 threads: 2628ms
+Buy method:	 count 1485566 | period 30119 | average 0.02027 ms
+Return method:	 count 1001227 | period  3235 | average 0.00323 ms
+Query method:	 count 6998959 | period 175421 | average 0.02506 ms
+
+Sleep finish!
+Using 128 threads: 2258ms
+Buy method:	 count 1482712 | period 36519 | average 0.02463 ms
+Return method:	 count  998850 | period  2526 | average 0.00253 ms
+Query method:	 count 7001168 | period 189327 | average 0.02704 ms
+
+Sleep finish!
