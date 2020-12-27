@@ -64,8 +64,8 @@ public class Route {
     public Ticket buyTicket(int departure, int arrival) {
         if (departure >= stationNum || arrival >= stationNum) return null;
         List<Integer> tempCoachNumList = this.coachNumList.subList(0, this.coachNumList.size());
-        Random tempRand = new Random(System.currentTimeMillis());
-        Collections.shuffle(tempCoachNumList, tempRand); // 将车厢顺序打乱，避免压力集中在前几个车厢
+        Random tempRand = new Random((System.currentTimeMillis() + Thread.currentThread().getId()) % Long.MAX_VALUE);
+	Collections.shuffle(tempCoachNumList, tempRand); // 将车厢顺序打乱，避免压力集中在前几个车厢
         List<Integer> tempSeatNumList = this.seatNumList.subList(0, this.seatNumList.size());
         Collections.shuffle(tempSeatNumList, tempRand); // 将座位顺序打乱，避免压力集中在前几个座位
         for (int i = 0; i < tempCoachNumList.size(); i++) { // 遍历所有车厢

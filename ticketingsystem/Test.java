@@ -10,11 +10,11 @@ public class Test {
 
     final static int threadnums[] = {1, 4, 8, 16, 32, 64, 100, 128};
     final static int routenum = 100; // route is designed from 1 to 3
-    final static int coachnum = 14; // coach is arranged from 1 to 5
+    final static int coachnum = 10; // coach is arranged from 1 to 5
     final static int seatnum = 100; // seat is allocated from 1 to 20
-    final static int stationnum = 50; // station is designed from 1 to 5
+    final static int stationnum = 30; // station is designed from 1 to 5
 
-    final static int testnum = 100000;
+    final static int testnum = 10000000;
     final static int retpc = 10; // return ticket operation is 10% percent
     final static int buypc = 30; // buy ticket operation is 20% percent
     final static int inqpc = 100; //inquiry ticket operation is 70% percent
@@ -48,7 +48,7 @@ public class Test {
                         int buyCount = 0, returnCount = 0, queryCount = 0;
                         long buyPeriod = 0, returnPeriod = 0, queryPeriod = 0;
 
-                        for (int i = 0; i < testnum; i++) {
+                        for (int i = 0; i < testnum/threadnum; i++) {
                             int sel = rand.nextInt(inqpc);
                             long periodStart = System.currentTimeMillis();
                             if (0 <= sel && sel < retpc && soldTicket.size() > 0) { // return ticket
